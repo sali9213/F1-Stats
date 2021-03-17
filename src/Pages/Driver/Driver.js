@@ -1,38 +1,63 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import TableWrapper from "../../Components/Table/Table";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+// import _ from "lodash";
+import { useHistory } from "react-router-dom";
+
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+  tableContainer: {
+    maxWidth: 1200,
+    margin: "2em auto",
+  },
+  cell: {
+    maxHeight: 20,
+    padding: "0",
+  },
+  row: {
+    height: "1.5rem",
+    transition: "0.3s",
+    // "&:hover": {
+    //   background: "#ffb3b3",
+    //   transition: "0.2s",
+    // },
+  },
+  clickable: {
+    "&:hover": {
+      background: "#ffb3b3",
+      transition: "0.2s",
+      cursor: "pointer",
+    },
+  },
+});
 
 export default function Driver() {
   const [driverInfo, setDriverInfo] = useState({});
   const [driverResults, setDriverResults] = useState([]);
   const { name } = useParams();
+  const history = useHistory();
 
-  const columns = ["Race", "Circuit", "Constructor", "Position"];
-
-  /**
-   * Object = {
-   *  key,
-   *  id,
-   *  callback_func
-   * }
-   */
+  const columns = ["Season", "Race", "Circuit", "Constructor", "Position"];
 
   // const keys = [
-  //   'url',
-  //   {
-  //     key: 'season',
-  //     id_key: ''
-  //   }
-  // ]
+  //   "url",
+  //   ["season", "raceName"],
+  //   ["Circuit.circuitName"],
+  //   ["Results[0].Constructor.name"],
+  //   ["Results[0].position"],
+  // ];
 
-  const keys = [
-    "url",
-    ["season", "raceName"],
-    ["Circuit.circuitName"],
-    ["Results[0].Constructor.name"],
-    ["Results[0].position"],
-  ];
+  const classes = useStyles();
 
   useEffect(() => {
     axios.get(`http://ergast.com/api/f1/drivers/${name}.json`).then((res) => {
@@ -60,6 +85,21 @@ export default function Driver() {
     return false;
   }
 
+  const onConstructorClick = useCallback((constructorId) => {
+    console.log(constructorId);
+  }, []);
+
+  const onCircuitClick = useCallback((circuitId) => {
+    console.log(circuitId);
+  }, []);
+
+  // const onRowClick = useCallback(
+  //   (id) => {
+  //     history.push(`/drivers/${id}`);
+  //   },
+  //   [history]
+  // );
+
   if (isEmpty(driverInfo)) {
     return <div>Driver Information not found</div>;
   } else {
@@ -71,11 +111,72 @@ export default function Driver() {
           <li>Nationality: {driverInfo.nationality}</li>
           <li>Date of Birth: {driverInfo.dateOfBirth}</li>
         </ul>
-        <TableWrapper
-          columns={columns}
-          data={driverResults}
-          keys={keys}
-        ></TableWrapper>
+        <TableContainer className={classes.tableContainer} component={Paper}>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow key="head">
+                {columns.map((column) => (
+                  <TableCell align="center">
+                    <b>{column}</b>
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {driverResults.map((row, i) => {
+                return (
+                  <TableRow className={classes.row} key={row.url}>
+                    <TableCell
+                      className={`${classes.cell} ${classes.clickable}`}
+                      component="th"
+                      scope="row"
+                      align="center"
+                    >
+                      {row.season}
+                    </TableCell>
+                    <TableCell
+                      className={`${classes.cell} ${classes.clickable}`}
+                      scope="row"
+                      align="center"
+                      onMouseEnter={() => {console.log("hovering over this bish")}}
+                    >
+                      {row.raceName}
+                    </TableCell>
+                    <TableCell
+                      className={`${classes.cell} ${classes.clickable}`}
+                      scope="row"
+                      align="center"
+                      onClick={() => {
+                        onCircuitClick(row.Circuit.circuitId);
+                      }}
+                    >
+                      {row.Circuit.circuitName}
+                    </TableCell>
+                    <TableCell
+                      className={`${classes.cell} ${classes.clickable}`}
+                      scope="row"
+                      align="center"
+                      onClick={() => {
+                        onConstructorClick(
+                          row.Results[0].Constructor.constructorId
+                        );
+                      }}
+                    >
+                      {row.Results[0].Constructor.name}
+                    </TableCell>
+                    <TableCell
+                      className={`${classes.cell} ${classes.clickable}`}
+                      scope="row"
+                      align="center"
+                    >
+                      {row.Results[0].position}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     );
   }
