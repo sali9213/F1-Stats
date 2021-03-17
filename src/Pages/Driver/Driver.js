@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import axios from "axios";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -9,8 +9,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-// import _ from "lodash";
-import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   table: {
@@ -86,7 +84,7 @@ export default function Driver() {
   }
 
   const onConstructorClick = useCallback((constructorId) => {
-    console.log(constructorId);
+    history.push(`/constructors/${constructorId}`);
   }, []);
 
   const onCircuitClick = useCallback((circuitId) => {
@@ -138,7 +136,6 @@ export default function Driver() {
                       className={`${classes.cell} ${classes.clickable}`}
                       scope="row"
                       align="center"
-                      onMouseEnter={() => {console.log("hovering over this bish")}}
                     >
                       {row.raceName}
                     </TableCell>
@@ -165,7 +162,7 @@ export default function Driver() {
                       {row.Results[0].Constructor.name}
                     </TableCell>
                     <TableCell
-                      className={`${classes.cell} ${classes.clickable}`}
+                      className={`${classes.cell}`}
                       scope="row"
                       align="center"
                     >
