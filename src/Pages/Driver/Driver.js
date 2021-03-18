@@ -97,12 +97,6 @@ export default function Driver() {
     console.log(season + " " + round);
   }, []);
 
-  // const onRowClick = useCallback(
-  //   (id) => {
-  //     history.push(`/drivers/${id}`);
-  //   },
-  //   [history]
-  // );
 
   if (isEmpty(driverInfo)) {
     return <div>Driver Information not found</div>;
@@ -140,23 +134,7 @@ export default function Driver() {
                       }}
                     >
                     {row.season + " " + row.raceName}
-                      {/* {row.season + " " + row.raceName} */}
                     </TableCell>
-                    {/* <TableCell
-                      className={`${classes.cell} ${classes.clickable}`}
-                      component="th"
-                      scope="row"
-                      align="center"
-                    >
-                      {row.season}
-                    </TableCell>
-                    <TableCell
-                      className={`${classes.cell} ${classes.clickable}`}
-                      scope="row"
-                      align="center"
-                    >
-                      {row.raceName}
-                    </TableCell> */}
                     <TableCell
                       className={`${classes.cell} ${classes.clickable}`}
                       scope="row"

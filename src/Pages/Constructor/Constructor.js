@@ -55,7 +55,6 @@ export default function Constructor() {
     axios
       .get(`http://ergast.com/api/f1/constructors/${constructorId}.json`)
       .then((res) => {
-        // console.log(res.data);
         setConstructorInfo(res.data.MRData.ConstructorTable.Constructors[0]);
       });
   }, []);
@@ -66,7 +65,6 @@ export default function Constructor() {
         `http://ergast.com/api/f1/constructors/${constructorId}/results.json`
       )
       .then((res) => {
-        // console.log(res);
         setConstructorResults(res.data.MRData.RaceTable.Races);
       });
   }, []);
