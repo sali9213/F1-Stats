@@ -9,6 +9,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
+import styles from "./Driver.module.css";
 
 const useStyles = makeStyles({
   table: {
@@ -45,7 +46,7 @@ export default function Driver() {
   const { name } = useParams();
   const history = useHistory();
 
-  const columns = ["Season", "Race", "Circuit", "Constructor", "Position"];
+  const columns = ["Race", "Circuit", "Constructor", "Position"];
 
   // const keys = [
   //   "url",
@@ -89,6 +90,11 @@ export default function Driver() {
 
   const onCircuitClick = useCallback((circuitId) => {
     console.log(circuitId);
+    // history.push(`/circuits/${circuitId}`);
+  }, []);
+
+  const onRaceClick = useCallback((season, round) => {
+    console.log(season + " " + round);
   }, []);
 
   // const onRowClick = useCallback(
@@ -129,6 +135,18 @@ export default function Driver() {
                       component="th"
                       scope="row"
                       align="center"
+                      onClick={() => {
+                        onRaceClick(row.season, row.round);
+                      }}
+                    >
+                    {row.season + " " + row.raceName}
+                      {/* {row.season + " " + row.raceName} */}
+                    </TableCell>
+                    {/* <TableCell
+                      className={`${classes.cell} ${classes.clickable}`}
+                      component="th"
+                      scope="row"
+                      align="center"
                     >
                       {row.season}
                     </TableCell>
@@ -138,7 +156,7 @@ export default function Driver() {
                       align="center"
                     >
                       {row.raceName}
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell
                       className={`${classes.cell} ${classes.clickable}`}
                       scope="row"

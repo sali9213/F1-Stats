@@ -12,6 +12,7 @@ function App() {
         <Route exact path="/" component={Home}/>
         <Route exact path="/drivers" component={Drivers}/>
         <Route path="/drivers/:name" component={Driver}/>
+        {/* <Route exact path="/constructors" component={Constructors}/> */}
         <Route path="/constructors/:constructorId" component={Constructor}/>
       </Switch>
     </Router>
