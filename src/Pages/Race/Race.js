@@ -38,7 +38,7 @@ export default function Race() {
       .then((res) => {
         setRoundInfo(res.data.MRData.RaceTable.Races[0]);
         setRoundResults(res.data.MRData.RaceTable.Races[0].Results);
-        console.log(res);
+        // console.log(res);
       });
   }, []);
 
