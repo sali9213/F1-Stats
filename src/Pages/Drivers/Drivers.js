@@ -37,7 +37,7 @@ const useStyles = makeStyles({
   },
 });
 
-function Drivers() {
+export default function Drivers() {
   const [drivers, setDrivers] = useState([]);
   const [offset, setOffset] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -131,5 +131,3 @@ function Drivers() {
     </div>
   );
 }
-
-export default Drivers;

@@ -4,6 +4,7 @@ import Drivers from "./Pages/Drivers/Drivers";
 import Driver from "./Pages/Driver/Driver";
 import Constructor from "./Pages/Constructor/Constructor";
 import './App.css';
+import Race from './Pages/Race/Race';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/drivers/:name" component={Driver}/>
         {/* <Route exact path="/constructors" component={Constructors}/> */}
         <Route path="/constructors/:constructorId" component={Constructor}/>
+        <Route path="/seasons/:season/:round" component={Race}/>
       </Switch>
     </Router>
   );

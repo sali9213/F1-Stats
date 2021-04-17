@@ -8,37 +8,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
 import styles from "./Driver.module.css";
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-  tableContainer: {
-    maxWidth: 1200,
-    margin: "2em auto",
-  },
-  cell: {
-    maxHeight: 20,
-    padding: "0",
-  },
-  row: {
-    height: "1.5rem",
-    transition: "0.3s",
-    // "&:hover": {
-    //   background: "#ffb3b3",
-    //   transition: "0.2s",
-    // },
-  },
-  clickable: {
-    "&:hover": {
-      background: "#ffb3b3",
-      transition: "0.2s",
-      cursor: "pointer",
-    },
-  },
-});
+import { tableStyles } from "../../Styles/TableStyles";
 
 export default function Driver() {
   const [driverInfo, setDriverInfo] = useState({});
@@ -56,7 +27,7 @@ export default function Driver() {
   //   ["Results[0].position"],
   // ];
 
-  const classes = useStyles();
+  const classes = tableStyles();
 
   useEffect(() => {
     axios.get(`http://ergast.com/api/f1/drivers/${name}.json`).then((res) => {
@@ -94,9 +65,8 @@ export default function Driver() {
   }, []);
 
   const onRaceClick = useCallback((season, round) => {
-    console.log(season + " " + round);
+    history.push(`/seasons/${season}/${round}`);
   }, []);
-
 
   if (isEmpty(driverInfo)) {
     return <div>Driver Information not found</div>;
@@ -133,7 +103,7 @@ export default function Driver() {
                         onRaceClick(row.season, row.round);
                       }}
                     >
-                    {row.season + " " + row.raceName}
+                      {row.season + " " + row.raceName}
                     </TableCell>
                     <TableCell
                       className={`${classes.cell} ${classes.clickable}`}
