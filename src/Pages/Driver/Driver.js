@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import axios from "axios";
 import Table from "@material-ui/core/Table";
@@ -11,21 +11,31 @@ import Paper from "@material-ui/core/Paper";
 import styles from "./Driver.module.css";
 import { tableStyles } from "../../Styles/TableStyles";
 
+function isEmpty(obj) {
+  if (Object.keys(obj).length === 0) {
+    return true;
+  }
+  return false;
+}
+
 export default function Driver() {
   const [driverInfo, setDriverInfo] = useState({});
   const [driverResults, setDriverResults] = useState([]);
+  const [numberOfRaces, setNumberOfRaces] = useState(0);
+  const [numberOfPoints, setNumberOfPoints] = useState(0);
+  const [numberOfPodiums, setNumberOfPodiums] = useState(0);
+  const [numberOfWins, setNumberOfWins] = useState(0);
   const { name } = useParams();
   const history = useHistory();
 
-  const columns = ["Race", "Circuit", "Constructor", "Position"];
-
-  // const keys = [
-  //   "url",
-  //   ["season", "raceName"],
-  //   ["Circuit.circuitName"],
-  //   ["Results[0].Constructor.name"],
-  //   ["Results[0].position"],
-  // ];
+  const columns = [
+    "Race",
+    "Circuit",
+    "Constructor",
+    "Grid",
+    "Position",
+    "Status",
+  ];
 
   const classes = tableStyles();
 
@@ -44,16 +54,35 @@ export default function Driver() {
         if (res.data.MRData.RaceTable.Races.length > 0) {
           res.data.MRData.RaceTable.Races.reverse();
           setDriverResults(res.data.MRData.RaceTable.Races);
+          setNumberOfRaces(res.data.MRData.total);
         }
       });
-  }, []);
+  }, [name]);
 
-  function isEmpty(obj) {
-    if (Object.keys(obj).length === 0) {
-      return true;
-    }
-    return false;
-  }
+  useEffect(() => {
+    let podiums = 0;
+    let wins = 0;
+    let points = 0;
+    driverResults.forEach((race) => {
+      race = race.Results[0];
+      if (
+        race.positionText === "1" ||
+        race.positionText === "2" ||
+        race.positionText === "3"
+      ) {
+        podiums += 1;
+      }
+      if (race.positionText === "1") {
+        wins += 1;
+      }
+      // setNumberOfPoints(numberOfPoints + Number(race.points));
+      points += Number(race.points);
+    });
+
+    setNumberOfPodiums(podiums);
+    setNumberOfWins(wins);
+    setNumberOfPoints(points);
+  }, [driverResults])
 
   const onConstructorClick = useCallback((constructorId) => {
     history.push(`/constructors/${constructorId}`);
@@ -78,6 +107,10 @@ export default function Driver() {
           <li>Driver Number: {driverInfo.permanentNumber}</li>
           <li>Nationality: {driverInfo.nationality}</li>
           <li>Date of Birth: {driverInfo.dateOfBirth}</li>
+          <li>Number of Races: {numberOfRaces}</li>
+          <li>Number of wins: {numberOfWins}</li>
+          <li>Number of Podiums: {numberOfPodiums}</li>
+          <li>Total Points: {numberOfPoints}</li>
         </ul>
         <TableContainer className={classes.tableContainer} component={Paper}>
           <Table className={classes.table} aria-label="simple table">
@@ -132,7 +165,21 @@ export default function Driver() {
                       scope="row"
                       align="center"
                     >
-                      {row.Results[0].position}
+                      {row.Results[0].grid}
+                    </TableCell>
+                    <TableCell
+                      className={`${classes.cell}`}
+                      scope="row"
+                      align="center"
+                    >
+                      {row.Results[0].positionText}
+                    </TableCell>
+                    <TableCell
+                      className={`${classes.cell}`}
+                      scope="row"
+                      align="center"
+                    >
+                      {row.Results[0].status}
                     </TableCell>
                   </TableRow>
                 );
