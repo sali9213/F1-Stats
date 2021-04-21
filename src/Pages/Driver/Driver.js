@@ -8,15 +8,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import styles from "./Driver.module.css";
 import { tableStyles } from "../../Styles/TableStyles";
-
-function isEmpty(obj) {
-  if (Object.keys(obj).length === 0) {
-    return true;
-  }
-  return false;
-}
 
 export default function Driver() {
   const [driverInfo, setDriverInfo] = useState({});
@@ -97,7 +89,7 @@ export default function Driver() {
     history.push(`/seasons/${season}/${round}`);
   }, []);
 
-  if (isEmpty(driverInfo)) {
+  if (Object.keys(driverInfo) === 0) {
     return <div>Driver Information not found</div>;
   } else {
     return (
@@ -115,9 +107,9 @@ export default function Driver() {
         <TableContainer className={classes.tableContainer} component={Paper}>
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
-              <TableRow key="head">
+              <TableRow>
                 {columns.map((column) => (
-                  <TableCell align="center">
+                  <TableCell align="center" key={column}>
                     <b>{column}</b>
                   </TableCell>
                 ))}

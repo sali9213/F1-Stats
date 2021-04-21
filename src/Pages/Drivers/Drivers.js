@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import TableWrapper from "../../Components/Table/Table";
 import Pagination from "@material-ui/lab/Pagination";
 import { useCallback } from "react";
 import styles from "./Drivers.module.css";
@@ -90,9 +89,9 @@ export default function Drivers() {
       <TableContainer className={classes.tableContainer} component={Paper}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
-            <TableRow key="head">
+            <TableRow>
               {columns.map((column) => (
-                <TableCell align="center">
+                <TableCell align="center" key={column}>
                   <b>{column}</b>
                 </TableCell>
               ))}
@@ -106,12 +105,13 @@ export default function Drivers() {
                   key={keys.length === columns.length ? i : row[keys[0]]}
                   onClick={() => onRowClick(row[keys[0]])}
                 >
-                  {keys.slice(1).map((key, i) => (
+                  {keys.slice(1).map((key, j) => (
                     <TableCell
                       className={classes.cell}
                       component="th"
                       scope="row"
                       align="center"
+                      key={key === "permanentNumber" ? i : _.get(row, key)}
                     >
                       {_.get(row, key)}
                     </TableCell>
