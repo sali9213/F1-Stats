@@ -8,10 +8,28 @@ import {
   TableBody,
   TableRow,
 } from "@material-ui/core";
+import { useCallback } from "react";
+import { useHistory } from "react-router";
+
+function convertDate(date) {
+  let d = new Date(date);
+  let dateString =
+    d.getDate() +
+    " " +
+    new Intl.DateTimeFormat("en-US", { month: "long" }).format(d) +
+    " " +
+    d.getFullYear();
+  return dateString;
+}
 
 export default function RaceList({ results }) {
-  const columns = ["Race Name", "Circuit", "Date", "Winner"]
+  const columns = ["Race Name", "Circuit", "Date", "Winner"];
   const classes = tableStyles();
+  const history = useHistory();
+
+  const onRaceClick = useCallback((season, round) => {
+    history.push(`/seasons/${season}/${round}`);
+  }, []);
 
   return (
     <TableContainer className={classes.tableContainer} component={Paper}>
@@ -28,7 +46,12 @@ export default function RaceList({ results }) {
         <TableBody>
           {results.map((row) => (
             <TableRow key={row.round}>
-              <TableCell className={classes.cell} scope="row" align="center">
+              <TableCell
+                className={`${classes.cell} ${classes.clickable}`}
+                scope="row"
+                align="center"
+                onClick={() => onRaceClick(row.season, row.round)}
+              >
                 {row.raceName}
               </TableCell>
               <TableCell
@@ -43,14 +66,17 @@ export default function RaceList({ results }) {
                 scope="row"
                 align="center"
               >
-                {row.date}
+                {/* {new Date(row.date).toDateString()} */}
+                {convertDate(row.date)}
               </TableCell>
               <TableCell
                 className={`${classes.cell}`}
                 scope="row"
                 align="center"
               >
-                {row.Results[0].Driver.givenName + " " + row.Results[0].Driver.familyName}
+                {row.Results[0].Driver.givenName +
+                  " " +
+                  row.Results[0].Driver.familyName}
               </TableCell>
             </TableRow>
           ))}
