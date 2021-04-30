@@ -9,6 +9,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { tableStyles } from "../../Styles/TableStyles";
+import DriverRaceTable from "../../Components/Tables/DriverRaceTable/DriverRaceTable";
 
 export default function Driver() {
   const [driverInfo, setDriverInfo] = useState({});
@@ -19,15 +20,6 @@ export default function Driver() {
   const [numberOfWins, setNumberOfWins] = useState(0);
   const { name } = useParams();
   const history = useHistory();
-
-  const columns = [
-    "Race",
-    "Circuit",
-    "Constructor",
-    "Grid",
-    "Position",
-    "Status",
-  ];
 
   const classes = tableStyles();
 
@@ -76,18 +68,6 @@ export default function Driver() {
     setNumberOfPoints(points);
   }, [driverResults])
 
-  const onConstructorClick = useCallback((constructorId) => {
-    history.push(`/constructors/${constructorId}`);
-  }, []);
-
-  const onCircuitClick = useCallback((circuitId) => {
-    console.log(circuitId);
-    // history.push(`/circuits/${circuitId}`);
-  }, []);
-
-  const onRaceClick = useCallback((season, round) => {
-    history.push(`/seasons/${season}/${round}`);
-  }, []);
 
   if (Object.keys(driverInfo) === 0) {
     return <div>Driver Information not found</div>;
@@ -104,81 +84,7 @@ export default function Driver() {
           <li>Number of Podiums: {numberOfPodiums}</li>
           <li>Total Points: {numberOfPoints}</li>
         </ul>
-        <TableContainer className={classes.tableContainer} component={Paper}>
-          <Table className={classes.table} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell align="center" key={column}>
-                    <b>{column}</b>
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {driverResults.map((row, i) => {
-                return (
-                  <TableRow className={classes.row} key={row.url}>
-                    <TableCell
-                      className={`${classes.cell} ${classes.clickable}`}
-                      component="th"
-                      scope="row"
-                      align="center"
-                      onClick={() => {
-                        onRaceClick(row.season, row.round);
-                      }}
-                    >
-                      {row.season + " " + row.raceName}
-                    </TableCell>
-                    <TableCell
-                      className={`${classes.cell} ${classes.clickable}`}
-                      scope="row"
-                      align="center"
-                      onClick={() => {
-                        onCircuitClick(row.Circuit.circuitId);
-                      }}
-                    >
-                      {row.Circuit.circuitName}
-                    </TableCell>
-                    <TableCell
-                      className={`${classes.cell} ${classes.clickable}`}
-                      scope="row"
-                      align="center"
-                      onClick={() => {
-                        onConstructorClick(
-                          row.Results[0].Constructor.constructorId
-                        );
-                      }}
-                    >
-                      {row.Results[0].Constructor.name}
-                    </TableCell>
-                    <TableCell
-                      className={`${classes.cell}`}
-                      scope="row"
-                      align="center"
-                    >
-                      {row.Results[0].grid}
-                    </TableCell>
-                    <TableCell
-                      className={`${classes.cell}`}
-                      scope="row"
-                      align="center"
-                    >
-                      {row.Results[0].positionText}
-                    </TableCell>
-                    <TableCell
-                      className={`${classes.cell}`}
-                      scope="row"
-                      align="center"
-                    >
-                      {row.Results[0].status}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <DriverRaceTable raceData={driverResults}/>
       </div>
     );
   }
