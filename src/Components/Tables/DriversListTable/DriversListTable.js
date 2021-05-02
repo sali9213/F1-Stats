@@ -1,4 +1,3 @@
-import { tableStyles } from "../../../Styles/TableStyles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -12,6 +11,8 @@ import axios from "axios";
 import styles from "./DriversListTable.module.css";
 import Pagination from "@material-ui/lab/Pagination";
 import _ from "lodash";
+import { tableStyles } from "../../../Styles/TableStyles";
+
 
 export default function DriversListTable() {
   const [drivers, setDrivers] = useState([]);
@@ -63,7 +64,7 @@ export default function DriversListTable() {
 
   return (
     <div>
-      {/* <TableContainer className={classes.tableContainer} component={Paper}>
+      <TableContainer className={classes.tableContainer} component={Paper}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -104,7 +105,7 @@ export default function DriversListTable() {
         count={totalPages}
         color="primary"
         onChange={handleChange}
-      /> */}
+      />
     </div>
   );
 }
