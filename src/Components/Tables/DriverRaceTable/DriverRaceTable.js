@@ -9,7 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { useCallback } from "react";
 
-export default function DriverRaceTable({ raceData }) {
+export default function DriverRaceTable({ driverRaces }) {
   const history = useHistory();
   const classes = tableStyles();
 
@@ -48,7 +48,7 @@ export default function DriverRaceTable({ raceData }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {raceData.map((row, i) => {
+          {driverRaces.map((row, i) => {
             return (
               <TableRow className={classes.row} key={row.url}>
                 <TableCell

@@ -84,7 +84,7 @@ export default function Driver() {
           <li>Number of Podiums: {numberOfPodiums}</li>
           <li>Total Points: {numberOfPoints}</li>
         </ul>
-        <DriverRaceTable raceData={driverResults}/>
+        <DriverRaceTable driverRaces={driverResults}/>
       </div>
     );
   }
